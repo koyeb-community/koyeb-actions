@@ -1,8 +1,8 @@
 name: 'Install koyeb cli'
 description: 'An Action to install and configure koyeb cli'
 inputs:
-  token:
-    description: 'Koyeb token'
+  api_key:
+    description: 'Koyeb api key'
     required: true
 runs:
   using: "composite"
@@ -14,6 +14,6 @@ runs:
       shell: bash
     - name: Create koyeb init
       shell: bash
-      run: echo "token: $TOKEN" > ~/.koyeb.yaml
+      run: echo "token: $KOYEB_API_KEY" > ~/.koyeb.yaml
       env:
-        TOKEN: ${{ inputs.token }}
+        KOYEB_API_KEY: ${{ inputs.api_key }}
