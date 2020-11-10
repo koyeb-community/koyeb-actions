@@ -10,8 +10,10 @@ runs:
     - name: Install koyeb cli
       run: |
         set -x
-        curl -sL $(curl -s https://api.github.com/repos/koyeb/koyeb-cli/releases/latest | grep 'http.*koyeb-cli-linux-x86_64' | awk '{print $2}' | sed 's|[\"\,]*||g') -o /usr/local/bin/koyeb
-        chmod +x /usr/local/bin/koyeb
+        mkdir ${{github.action_path}}/bin
+        curl -sL $(curl -s https://api.github.com/repos/koyeb/koyeb-cli/releases/latest | grep 'http.*koyeb-cli-linux-x86_64' | awk '{print $2}' | sed 's|[\"\,]*||g') -o ${{ github.action_path	}}/bin/koyeb
+        chmod +x ${{github.action_path}}/bin/koyeb
+        echo ${{github.action_path}}/bin/ >> $GITHUB_PATH
       shell: bash
     - name: Create koyeb init
       shell: bash
