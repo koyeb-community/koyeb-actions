@@ -14,4 +14,6 @@ runs:
       shell: bash
     - name: Create koyeb init
       shell: bash
-      run: echo "token: ${{ inputs.token }}" > ~/.koyeb.yaml
+      run: echo "token: $TOKEN" > ~/.koyeb.yaml
+      env:
+        TOKEN: ${{ inputs.token }}
