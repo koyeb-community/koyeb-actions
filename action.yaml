@@ -9,12 +9,14 @@ runs:
   steps:
     - name: Install koyeb cli
       run: |
+        set -x
         curl -sL $(curl -s https://api.github.com/repos/koyeb/koyeb-cli/releases/latest | grep 'http.*koyeb-cli-linux-x86_64' | awk '{print $2}' | sed 's|[\"\,]*||g') -o /usr/local/bin/koyeb
         chmod +x /usr/local/bin/koyeb
       shell: bash
     - name: Create koyeb init
       shell: bash
       run: |
+        set -x
         echo "token: $KOYEB_API_KEY" > ~/.koyeb.yaml
       env:
         KOYEB_API_KEY: ${{ inputs.api_key }}
