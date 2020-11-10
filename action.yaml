@@ -13,6 +13,7 @@ runs:
         chmod +x /usr/local/bin/koyeb
       shell: bash
     - name: Create koyeb init
+      shell: bash
       run: |
         echo "token: $KOYEB_API_KEY" > ~/.koyeb.yaml
       env:
