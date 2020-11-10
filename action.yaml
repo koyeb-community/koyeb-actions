@@ -1,5 +1,5 @@
-name: 'Install koyeb cli'
-description: 'An Action to install and configure koyeb cli'
+name: install-koyeb-cli
+description: An Action to install and configure koyeb cli
 inputs:
   api_key:
     description: 'Koyeb api key'
