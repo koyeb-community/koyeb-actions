@@ -23,7 +23,7 @@ jobs:
       - name: Install and configure Koyeb cli
         uses: koyeb-community/install-koyeb-cli@v2
         with:
-          api_key: "${{ secrets.KOYEB_TOKEN }}"
+          api_token: "${{ secrets.KOYEB_TOKEN }}"
           
       - name: Redeploy service
         run: koyeb services redeploy --app=app-name service-name
