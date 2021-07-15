@@ -1,30 +1,41 @@
 # install-koyeb-cli
-An Action to install and configure Koyeb cli
 
-Example:
-```
-name: CI
+This action to install and configure Koyeb CLI.
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+## Usage
+
+### Inputs
+
+| Input              | Required | Description                                                      |
+|--------------------|:--------:|------------------------------------------------------------------|
+| api_token          | [x]      | Your Koyeb API token. See https://app.koyeb.com/account/profile. |
+
+### How to use
+
+The example below checks out a copy of your repository, build & push the Docker to your GitHub Container Registry and trigger a new deployment of your application on Koyeb.
+
+```yaml
+name: Deploy to Koyeb
+on: [push]
 
 env:
-  STACK_NAME: hello-world
+  GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
-      - name: Install and configure Koyeb cli
+      - name: Docker build
+        run: docker build --rm=false -t ghcr.io/<YOUR_GITHUB_USERNAME>/<YOUR_DOCKER_IMAGE_NAME>:<YOUR_DOCKER_IMAGE_TAG> .
+      - name: Docker login
+        run: echo $GHCR_TOKEN | docker login ghcr.io -u <YOUR_GITHUB_USERNAME> --password-stdin
+      - name: Docker push
+        run: docker push ghcr.io/<YOUR_GITHUB_USERNAME>/<YOUR_DOCKER_IMAGE_NAME>:<YOUR_DOCKER_IMAGE_TAG>
+      - name: Install and configure the Koyeb CLI
         uses: koyeb-community/install-koyeb-cli@v2
         with:
           api_token: "${{ secrets.KOYEB_TOKEN }}"
-          
-      - name: Redeploy service
-        run: koyeb services redeploy --app=app-name service-name
+      - name: Deploy to Koyeb
+        run: koyeb services redeploy --app=<YOUR_KOYEB_APP_NAME> <YOUR_KOYEB_SERVICE_NAME>
 ```
