@@ -37,5 +37,5 @@ jobs:
         with:
           api_token: "${{ secrets.KOYEB_TOKEN }}"
       - name: Deploy to Koyeb
-        run: koyeb services redeploy --app=<YOUR_KOYEB_APP_NAME> <YOUR_KOYEB_SERVICE_NAME>
+        run: koyeb services redeploy <YOUR_KOYEB_SERVICE_ID>
 ```
