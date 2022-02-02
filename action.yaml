@@ -1,5 +1,5 @@
-name: Koyeb Github Actions
-description: An Action to install and configure the Koyeb CLI allowing you to deploy and manage your apps.
+name: Koyeb Action
+description: Install and configure the Koyeb CLI so you can deploy and manage your apps on Koyeb.
 inputs:
   api_token:
     description: 'Koyeb API token'
@@ -7,7 +7,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Install the Koyeb CLI
+    - name: Install Koyeb CLI
       run: |
         set -x
         mkdir ${{github.action_path}}/bin
@@ -18,7 +18,7 @@ runs:
         chmod +x ${{github.action_path}}/bin/koyeb
         echo ${{github.action_path}}/bin/ >> $GITHUB_PATH
       shell: bash
-    - name: Create koyeb init
+    - name: Configure Koyeb CLI
       shell: bash
       run: |
         set -x
