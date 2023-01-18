@@ -11,7 +11,7 @@ runs:
       run: |
         set -x
         mkdir ${{github.action_path}}/bin
-        curl -sL $(curl -s https://api.github.com/repos/koyeb/koyeb-cli/releases/latest \
+        curl -sL -H 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' $(curl -s -H 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' https://api.github.com/repos/koyeb/koyeb-cli/releases/latest \
           | grep 'http.*koyeb-cli_.*_linux_amd64' \
           | awk '{print $2}' \
           | sed 's|[\"\,]*||g') | tar xvz -C ${{github.action_path}}/bin/
