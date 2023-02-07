@@ -6,9 +6,10 @@ This action to install and configure Koyeb CLI.
 
 ### Inputs
 
-| Input              | Required | Description                                                      |
-|--------------------|:--------:|------------------------------------------------------------------|
-| api_token          | [x]      | Your Koyeb API token. See https://app.koyeb.com/account/profile. |
+| Input              | Required | Description                                                                 |
+|--------------------|:--------:|-----------------------------------------------------------------------------|
+| api_token          | [x]      | Your Koyeb API token. See https://app.koyeb.com/account/profile.            |
+| github_token       | [x]      | A github API token allowing to read public repositories (can be read-only). |
 
 ### How to use
 
@@ -36,6 +37,7 @@ jobs:
         uses: koyeb-community/install-koyeb-cli@v2
         with:
           api_token: "${{ secrets.KOYEB_TOKEN }}"
+          github_token: "${{ secrets.GITHUB_TOKEN }}"
       - name: Deploy to Koyeb
         run: koyeb service redeploy app_name/service_name
 ```
