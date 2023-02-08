@@ -1,33 +1,46 @@
 name: Koyeb Action
 description: Install and configure the Koyeb CLI so you can deploy and manage your apps on Koyeb.
+
 inputs:
   api_token:
     description: 'Koyeb API token'
     required: true
+
   github_token:
     description: 'Github API token'
     default: ${{ github.token }}
     required: true
+
 runs:
   using: "composite"
   steps:
     - name: Install Koyeb CLI
-      run: |
-        set -x
-        mkdir ${{github.action_path}}/bin
-        curl -sL -H "Authorization: Bearer $GITHUB_TOKEN" $(curl --s -H "Authorization: Bearer $GITHUB_TOKEN" https://api.github.com/repos/koyeb/koyeb-cli/releases/latest \
-          | grep 'http.*koyeb-cli_.*_linux_amd64' \
-          | awk '{print $2}' \
-          | sed 's|[\"\,]*||g') | tar xvz -C ${{github.action_path}}/bin/
-        chmod +x ${{github.action_path}}/bin/koyeb
-        echo ${{github.action_path}}/bin/ >> $GITHUB_PATH
       shell: bash
       env:
-        GITHUB_TOKEN: ${{inputs.github_token}}
+        GITHUB_TOKEN: ${{ inputs.github_token }}
+      run: |
+        set -xeo pipefail
+
+        bin_dir=${{ github.action_path }}/bin
+        mkdir "$bin_dir"
+
+        releases=$(curl -si -H "Authorization: Bearer $GITHUB_TOKEN" https://api.github.com/repos/koyeb/koyeb-cli/releases/latest)
+        latest_release_url=$(echo "$releases" | grep 'http.*koyeb-cli_.*_linux_amd64' | awk '{print $2}' | sed 's|[\"\,]*||g')
+
+        if -z "$latest_release_url"; then
+          echo "Cannot find latest Koyeb CLI release URL"
+          echo "$releases"
+          exit 1
+        fi
+
+        curl -sL -H "Authorization: Bearer $GITHUB_TOKEN" "$latest_release_url" | tar xvz -C "$bin_dir"
+        chmod +x "$bin_dir/koyeb"
+        echo $bin_dir >> $GITHUB_PATH
+
     - name: Configure Koyeb CLI
       shell: bash
+      env:
+        KOYEB_API_KEY: ${{inputs.api_token}}
       run: |
         set -x
         echo "token: $KOYEB_API_KEY" > ~/.koyeb.yaml
-      env:
-        KOYEB_API_KEY: ${{inputs.api_token}}
