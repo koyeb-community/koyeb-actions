@@ -6,6 +6,7 @@ inputs:
     required: true
   github_token:
     description: 'Github API token'
+    default: ${{ github.token }}
     required: true
 runs:
   using: "composite"
