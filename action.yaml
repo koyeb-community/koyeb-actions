@@ -27,6 +27,7 @@ runs:
           echo "Koyeb CLI already installed, skip installation"
         fi
 
+        echo "bin-dir=$bin_dir" >> "$GITHUB_OUTPUT"
         echo "is-installed=$is_installed" >> "$GITHUB_OUTPUT"
 
     - name: Retrieve Koyeb CLI URL
@@ -54,11 +55,12 @@ runs:
       shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
+        KOYEB_CLI_BIN_DIR: ${{ steps.check-koyeb-cli-installed.outputs.bin-dir }}
         KOYEB_CLI_URL: ${{ steps.retrieve-koyeb-cli-url.outputs.koyeb-cli-url }}
       run: |
         set -xeo pipefail
 
-        bin_dir="${{ github.action_path }}/bin"
+        bin_dir="$KOYEB_CLI_BIN_DIR"
         mkdir "$bin_dir"
 
         curl -sL -H "Authorization: Bearer $GITHUB_TOKEN" "$KOYEB_CLI_URL" | tar xvz -C "$bin_dir"
