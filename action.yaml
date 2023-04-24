@@ -14,8 +14,24 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Check if Koyeb CLI is already installed
+      id: check-koyeb-cli-installed
+      shell: bash
+      run: |
+        set -xeo pipefail
+
+        bin_dir="${{ github.action_path }}/bin"
+        is_installed=$(test -f "$bin_dir/koyeb" && echo true || echo false)
+
+        if [ "$is_installed" = 'true' ]; then
+          echo "Koyeb CLI already installed, skip installation"
+        fi
+
+        echo "is-installed=$is_installed" >> "$GITHUB_OUTPUT"
+
     - name: Retrieve Koyeb CLI URL
       id: retrieve-koyeb-cli-url
+      if: ${{ steps.check-koyeb-cli-installed.outputs.is-installed == 'false' }}
       shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
@@ -34,6 +50,7 @@ runs:
         echo "koyeb-cli-url=$latest_release_url" >> "$GITHUB_OUTPUT"
 
     - name: Download and Install Koyeb CLI
+      if: ${{ steps.check-koyeb-cli-installed.outputs.is-installed == 'false' }}
       shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
@@ -49,6 +66,7 @@ runs:
         echo "$bin_dir" >> "$GITHUB_PATH"
 
     - name: Configure Koyeb CLI
+      if: ${{ steps.check-koyeb-cli-installed.outputs.is-installed == 'false' }}
       shell: bash
       env:
         KOYEB_API_KEY: ${{inputs.api_token}}
