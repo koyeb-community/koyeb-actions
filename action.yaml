@@ -18,7 +18,7 @@ runs:
       id: check-koyeb-cli-installed
       shell: bash
       run: |
-        set -xeo pipefail
+        set -eo pipefail
 
         bin_dir="${{ github.action_path }}/bin"
         is_installed=$(test -f "$bin_dir/koyeb" && echo true || echo false)
@@ -37,7 +37,7 @@ runs:
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
       run: |
-        set -xeo pipefail
+        set -eo pipefail
 
         releases=$(curl -si -H "Authorization: Bearer $GITHUB_TOKEN" https://api.github.com/repos/koyeb/koyeb-cli/releases/latest)
         latest_release_url=$(echo "$releases" | grep 'http.*koyeb-cli_.*_linux_amd64' | awk '{print $2}' | sed 's|[\"\,]*||g')
@@ -58,7 +58,7 @@ runs:
         KOYEB_CLI_BIN_DIR: ${{ steps.check-koyeb-cli-installed.outputs.bin-dir }}
         KOYEB_CLI_URL: ${{ steps.retrieve-koyeb-cli-url.outputs.koyeb-cli-url }}
       run: |
-        set -xeo pipefail
+        set -eo pipefail
 
         bin_dir="$KOYEB_CLI_BIN_DIR"
         mkdir "$bin_dir"
@@ -73,5 +73,4 @@ runs:
       env:
         KOYEB_API_KEY: ${{inputs.api_token}}
       run: |
-        set -x
         echo "token: $KOYEB_API_KEY" > ~/.koyeb.yaml
