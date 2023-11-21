@@ -9,7 +9,7 @@ This action to install and configure Koyeb CLI.
 | Input              | Required | Description                                                                 |
 |--------------------|:--------:|-----------------------------------------------------------------------------|
 | api_token          | [x]      | Your Koyeb API token. See https://app.koyeb.com/account/profile.            |
-| github_token       | [x]      | A github API token allowing to read public repositories (can be read-only). |
+| github_token       | [ ]      | A github API token allowing to read public repositories (can be read-only). |
 | api_url            | [ ]      | The API URL. Defaults to https://app.koyeb.com                              |
 
 ### How to use
