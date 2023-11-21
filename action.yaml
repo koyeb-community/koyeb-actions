@@ -7,6 +7,11 @@ inputs:
   github_token:
     description: 'Github API token'
     required: true
+  api_url:
+    description: 'Koyeb API URL'
+    required: false
+    default: 'https://app.koyeb.com'
+
 runs:
   using: "composite"
   steps:
@@ -23,10 +28,13 @@ runs:
       shell: bash
       env:
         GITHUB_TOKEN: ${{inputs.github_token}}
+
     - name: Configure Koyeb CLI
       shell: bash
       run: |
         set -x
         echo "token: $KOYEB_API_KEY" > ~/.koyeb.yaml
+        echo "url: $KOYEB_API_URL" >> ~/.koyeb.yaml
       env:
         KOYEB_API_KEY: ${{inputs.api_token}}
+        KOYEB_API_URL: ${{inputs.api_url}}
