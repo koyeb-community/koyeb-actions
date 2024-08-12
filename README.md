@@ -1,4 +1,4 @@
-# install-koyeb-cli
+# koyeb-actions
 
 This action to install and configure Koyeb CLI.
 
@@ -35,7 +35,7 @@ jobs:
       - name: Docker push
         run: docker push ghcr.io/<YOUR_GITHUB_USERNAME>/<YOUR_DOCKER_IMAGE_NAME>:<YOUR_DOCKER_IMAGE_TAG>
       - name: Install and configure the Koyeb CLI
-        uses: koyeb-community/install-koyeb-cli@v2
+        uses: koyeb-community/koyeb-actions@v2
         with:
           api_token: "${{ secrets.KOYEB_TOKEN }}"
           github_token: "${{ secrets.GITHUB_TOKEN }}"
